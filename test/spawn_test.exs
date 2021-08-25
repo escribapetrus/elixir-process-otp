@@ -11,15 +11,15 @@ defmodule Blackmore.SpawnTest do
 
   test "changes song currently playing", %{player: player} do
     Player.select_song(player, "Child in Time")
+
+    client = self()
+    send(player, {:listen, client})
+
+    receive do
+      {:now_playing, title} -> assert title == "Child in Time"
+    end
     assert Process.alive?(player)
   end
-
-  test "sends song to speaker", %{player: player} do
-    Player.select_song(player, "Child in Time")
-    Player.listen(player)
-    assert Process.alive?(player)
-  end
-
 
   test "shuts down player", %{player: player} do
     assert Process.alive?(player)
