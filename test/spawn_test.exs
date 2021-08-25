@@ -18,6 +18,7 @@ defmodule Blackmore.SpawnTest do
     receive do
       {:now_playing, title} -> assert title == "Child in Time"
     end
+
     assert Process.alive?(player)
   end
 
