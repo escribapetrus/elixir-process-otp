@@ -1,18 +1,26 @@
 defmodule Blackmore do
-  @moduledoc """
-  Documentation for `Blackmore`.
-  """
+  use Application
 
-  @doc """
-  Hello world.
+  @impl true
+  def start(_type, _args) do
+    Blackmore.Supervisor.start_link(name: Blackmore.Supervisor)
+  end
+end
 
-  ## Examples
 
-      iex> Blackmore.hello()
-      :world
+defmodule Blackmore.Supervisor do
+  use Supervisor
 
-  """
-  def hello do
-    :world
+  def start_link(opts) do
+    Supervisor.start_link(__MODULE__, :ok, opts)
+  end
+
+  @impl true
+  def init(:ok) do
+    children = [
+      {Blackmore.GenserverPlayer, name: :player}
+    ]
+
+    Supervisor.init(children, strategy: :one_for_one)
   end
 end

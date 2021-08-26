@@ -9,6 +9,8 @@ defmodule Blackmore.GenserverPlayerTest do
 
   test "changes song", %{player: player} do
     Player.select_song(player, "Gates of Babylon")
+
+    assert Process.alive?(player)
     assert Player.listen(player) == "Gates of Babylon"
   end
 end
